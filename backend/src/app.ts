@@ -1,18 +1,19 @@
 import cors from "cors";
 import express from "express";
-import estimatorRouter from "./routes/estimator.routes";
-import { SERVER_CONFIG } from "./config/constants";
+import estimatorRouter from "./routes/estimator.routes.js";
+import { SERVER_CONFIG } from "./config/constants.js";
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Root route — friendly message when visiting the backend URL in a browser
+// Root route
 app.get("/", (_req, res) => {
   res.json({
     message: "ConstroMat API is running.",
-    hint: "Open http://localhost:5173 in your browser for the UI.",
+    hint: "Use /api endpoints",
     endpoints: {
       health: "GET /api/health",
       brickWallEstimate: "POST /api/brick-wall/estimate",
@@ -20,12 +21,17 @@ app.get("/", (_req, res) => {
   });
 });
 
+// Health check
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
+// Routes
 app.use("/api", estimatorRouter);
 
-app.listen(SERVER_CONFIG.PORT, () => {
-  console.log(`Backend running on http://localhost:${SERVER_CONFIG.PORT}`);
+// ✅ IMPORTANT: Use dynamic port for Render
+const PORT = process.env.PORT || SERVER_CONFIG.PORT;
+
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
 });
