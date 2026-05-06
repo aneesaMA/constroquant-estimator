@@ -1,0 +1,190 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #151515;
+}
+
+body {
+  margin: 0;
+  background: #f8f9fb;
+}
+
+.page {
+  min-height: 100vh;
+}
+
+.topbar {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6%;
+  background: #ffffff;
+  border-bottom: 1px solid #ececec;
+}
+
+.brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #c52f2f;
+}
+
+.menu {
+  display: flex;
+  gap: 1rem;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #222222;
+  font-size: 0.9rem;
+}
+
+.hero-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 6% 4rem;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.hero-copy h1 {
+  margin: 0;
+  font-size: 2.7rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  max-width: 580px;
+}
+
+.hero-copy h1 span {
+  color: #bf2b2b;
+}
+
+.hero-copy p {
+  margin-top: 1rem;
+  color: #555555;
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+.hero-icon {
+  margin-top: 1.5rem;
+  font-size: 4.2rem;
+}
+
+.estimator-card {
+  background: #ffffff;
+  border: 1px solid #ebedf2;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(26, 35, 60, 0.08);
+}
+
+.estimator-card h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.subtitle {
+  margin-top: 0.35rem;
+  margin-bottom: 1rem;
+  color: #6d7280;
+  font-size: 0.85rem;
+}
+
+form label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+  color: #4d5462;
+}
+
+select,
+input {
+  width: 100%;
+  border: 1px solid #d7dce4;
+  border-radius: 10px;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.92rem;
+  background: #fff;
+  outline: none;
+}
+
+select:focus,
+input:focus {
+  border-color: #7c8ec0;
+  box-shadow: 0 0 0 3px rgba(124, 142, 192, 0.18);
+}
+
+.input-grid {
+  margin-top: 0.85rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+}
+
+button[type="submit"] {
+  margin-top: 1rem;
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  padding: 0.76rem;
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, #7f8ba8, #6e7895);
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  filter: brightness(1.05);
+}
+
+#result {
+  margin-top: 0.85rem;
+  min-height: 1.25rem;
+  font-size: 0.88rem;
+  color: #2f4f2f;
+}
+
+#result.error {
+  color: #b42318;
+}
+
+@media (max-width: 960px) {
+  .hero-section {
+    grid-template-columns: 1fr;
+    padding-top: 2rem;
+  }
+
+  .hero-copy h1 {
+    font-size: 2.05rem;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.4rem;
+    height: auto;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+  }
+
+  .menu {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem;
+  }
+
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
+}
