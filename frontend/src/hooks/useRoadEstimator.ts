@@ -1,5 +1,5 @@
 import { TRAFFIC_CATEGORY_OPTIONS } from "../constants/estimator.constants";
-import { calculateRoadEstimate, fetchRoadAutoThicknesses } from "../services/roadEstimator.service";
+import { calculateRoadEstimate, getAutoThicknesses } from "../services/roadEstimator.service";
 import { RoadResultCard } from "../components/RoadResultCard";
 import { parseRoadForm } from "../utils/roadValidators";
 
@@ -24,17 +24,7 @@ export const useRoadEstimator = (
     return;
   }
 
-  const setThicknessLoading = (message: string): void => {
-    thicknessContainer.innerHTML = `
-      <div class="loading-indicator" role="status" aria-live="polite" style="grid-column: 1 / -1;">
-        <span class="loading-spinner" aria-hidden="true">⏳</span>
-        ${message}
-      </div>
-    `;
-  };
-
   const renderThicknessInputs = (layerThicknesses: Record<string, number>): void => {
-    // Keep stable ordering per pavement type for UX consistency.
     const layerOrder = Object.keys(layerThicknesses);
 
     thicknessContainer.innerHTML = layerOrder
@@ -52,7 +42,6 @@ export const useRoadEstimator = (
               min="1"
               value="${value}"
               data-auto="${value}"
-              aria-describedby="thickness_help"
             />
           </div>
         `;
@@ -61,33 +50,27 @@ export const useRoadEstimator = (
   };
 
   /**
-   * Road Estimator thickness auto-fill logic.
-   *
-   * - Auto values are fetched from backend thickness tables (API: `GET /api/road/thickness`).
-   * - Inputs remain editable; manual edits are sent as `thicknessOverrides`.
-   * - Overrides apply only for the current `POST /api/road/estimate` call.
+   * Thickness lookup is now fully client-side — no network call, always instant.
    */
-  const maybeFetchAndFillThicknesses = async (): Promise<void> => {
+  const maybeFillThicknesses = (): void => {
     const pavementType = pavementTypeSelect.value.trim();
     const trafficCategory = trafficCategorySelect.value.trim();
     const soilType = soilTypeSelect.value.trim();
 
     if (!pavementType || !trafficCategory || !soilType) {
-      setThicknessLoading("Select pavement, traffic, and soil to auto-fill thickness.");
+      thicknessContainer.innerHTML = `
+        <p class="road-thickness-hint" style="grid-column: 1 / -1;">
+          💡 Select pavement, traffic, and soil to auto-fill thickness.
+        </p>
+      `;
       return;
     }
 
-    setThicknessLoading("Fetching standard thickness values…");
     try {
-      const layerThicknesses = await fetchRoadAutoThicknesses({
-        pavementType,
-        trafficCategory,
-        soilType,
-      });
+      const layerThicknesses = getAutoThicknesses({ pavementType, trafficCategory, soilType });
       renderThicknessInputs(layerThicknesses as unknown as Record<string, number>);
     } catch (e) {
-      const msg =
-        e instanceof Error ? e.message : "Unable to fetch thickness values. Please try again.";
+      const msg = e instanceof Error ? e.message : "Unable to resolve thickness values.";
       thicknessContainer.innerHTML = `<p class="error-message" role="alert" style="grid-column: 1 / -1;">${msg}</p>`;
     }
   };
@@ -103,18 +86,15 @@ export const useRoadEstimator = (
       .map((opt) => `<option value="${opt.value}">${opt.label}</option>`)
       .join("");
 
-    // Reset traffic category selection (Requirement 1.4)
     trafficCategorySelect.value = "";
-
-    // Clear thickness until the user re-selects dependent values.
-    void maybeFetchAndFillThicknesses();
+    maybeFillThicknesses();
   });
 
-  trafficCategorySelect.addEventListener("change", () => void maybeFetchAndFillThicknesses());
-  soilTypeSelect.addEventListener("change", () => void maybeFetchAndFillThicknesses());
+  trafficCategorySelect.addEventListener("change", () => maybeFillThicknesses());
+  soilTypeSelect.addEventListener("change", () => maybeFillThicknesses());
 
   // Initial state
-  void maybeFetchAndFillThicknesses();
+  maybeFillThicknesses();
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
