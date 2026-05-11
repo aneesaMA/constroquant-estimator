@@ -1,7 +1,9 @@
-import { calculateBrickWallEstimate } from "../services/estimator.api";
+import { calculateRoomEstimate } from "../services/roomEstimator.service";
 import { BrickWallResultCard } from "../components/ResultCard";
 import { parseBrickWallForm } from "../utils/validators";
 import { renderBrickWallForm } from "../pages/EstimatorPage";
+import { renderRoadEstimatorForm } from "../pages/RoadEstimatorPage";
+import { useRoadEstimator } from "./useRoadEstimator";
 
 interface UseEstimatorArgs {
   constructionSelector: string;
@@ -32,6 +34,14 @@ export const useEstimator = ({
     return;
   }
 
+  /**
+   * Room Estimator (Brick Wall) UI + submit binding.
+   *
+   * - UI: `forms/roomEstimatorForm.ts` (rendered via `pages/EstimatorPage.ts`)
+   * - Validation: `utils/validators.ts` (`parseBrickWallForm`)
+   * - API: `POST /api/brick-wall/estimate` (frontend: `services/roomEstimator.service.ts`)
+   * - Formula source: backend `services/brickWall.service.ts`
+   */
   const bindBrickWallForm = (): void => {
     const form = formContainer.querySelector<HTMLFormElement>("#estimate-form");
     const submitButton = form?.querySelector<HTMLButtonElement>(".bw-submit-btn");
@@ -40,7 +50,7 @@ export const useEstimator = ({
       return;
     }
 
-    submitButton.disabled = constructionTypeSelect.value !== "brick-wall";
+    submitButton.disabled = constructionTypeSelect.value !== "room-construction";
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -65,7 +75,7 @@ export const useEstimator = ({
       `;
 
       try {
-        const result = await calculateBrickWallEstimate(input);
+        const result = await calculateRoomEstimate(input);
         resultContainer.innerHTML = BrickWallResultCard(result);
       } catch (error) {
         const message =
@@ -78,13 +88,30 @@ export const useEstimator = ({
     });
   };
 
+  const SUBTITLES: Record<string, string> = {
+    "room-construction": "All dimensions in feet · Mix ratio 1:6 · Includes 5% brick wastage",
+    "road-construction": "Dimensions in metres · Thicknesses auto-assigned · Includes compaction &amp; 3% wastage",
+  };
+
+  const updateSubtitle = (type: string): void => {
+    const el = document.querySelector<HTMLSpanElement>("#estimator-subtitle");
+    if (el) el.textContent = SUBTITLES[type] ?? "Select a construction type to begin.";
+  };
+
   const renderBySelection = (): void => {
     const selectedType = constructionTypeSelect.value;
     resultContainer.innerHTML = "";
+    updateSubtitle(selectedType);
 
-    if (selectedType === "brick-wall") {
+    if (selectedType === "room-construction") {
       formContainer.innerHTML = `<div class="fade-in">${renderBrickWallForm()}</div>`;
       bindBrickWallForm();
+      return;
+    }
+
+    if (selectedType === "road-construction") {
+      formContainer.innerHTML = `<div class="fade-in">${renderRoadEstimatorForm()}</div>`;
+      useRoadEstimator(formContainerSelector, resultSelector);
       return;
     }
 

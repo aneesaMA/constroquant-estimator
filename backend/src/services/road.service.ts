@@ -1,0 +1,5 @@
+/**
+ * Backwards-compatible export.
+ * The new implementation lives in `services/roadEstimator.service.ts`.
+ */
+export { calculateRoadEstimate as calculateRoad } from "./roadEstimator.service";

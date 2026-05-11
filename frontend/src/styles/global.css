@@ -46,50 +46,9 @@ body {
 
 /* ── Hero ── */
 .hero-section {
-  max-width: 1200px;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 3rem 6% 4rem;
-  display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: 2.5rem;
-  align-items: start;
-}
-
-.hero-copy h1 {
-  margin: 0;
-  font-size: 2.5rem;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  max-width: 520px;
-}
-
-.hero-copy h1 span {
-  color: #bf2b2b;
-}
-
-.hero-copy p {
-  margin-top: 1rem;
-  color: #555555;
-  max-width: 480px;
-  line-height: 1.6;
-  font-size: 0.95rem;
-}
-
-.hero-badges {
-  display: flex;
-  gap: 0.6rem;
-  margin-top: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.hero-badge {
-  background: #fff3f3;
-  border: 1px solid #f5c6c6;
-  color: #bf2b2b;
-  border-radius: 20px;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.82rem;
-  font-weight: 600;
+  padding: 2.5rem 6% 3rem;
 }
 
 /* ── Section Card ── */
@@ -429,13 +388,7 @@ input[type="number"]:focus {
 /* ── Responsive ── */
 @media (max-width: 960px) {
   .hero-section {
-    grid-template-columns: 1fr;
-    padding-top: 2rem;
-  }
-
-  .hero-copy h1 {
-    font-size: 2rem;
-    max-width: 100%;
+    padding-top: 1.5rem;
   }
 }
 

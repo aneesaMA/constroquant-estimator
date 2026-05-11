@@ -1,7 +1,8 @@
 import cors from "cors";
 import express from "express";
-import estimatorRouter from "./routes/estimator.routes.js";
-import { SERVER_CONFIG } from "./config/constants.js";
+import estimatorRouter from "./routes/estimator.routes";
+import roadRouter from "./routes/road.routes";
+import { SERVER_CONFIG } from "./config/constants";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get("/", (_req, res) => {
     endpoints: {
       health: "GET /api/health",
       brickWallEstimate: "POST /api/brick-wall/estimate",
+      roadEstimate: "POST /api/road/estimate",
     },
   });
 });
@@ -28,6 +30,7 @@ app.get("/api/health", (_req, res) => {
 
 // Routes
 app.use("/api", estimatorRouter);
+app.use("/api/road", roadRouter);
 
 // ✅ IMPORTANT: Use dynamic port for Render
 const PORT = process.env.PORT || SERVER_CONFIG.PORT;
