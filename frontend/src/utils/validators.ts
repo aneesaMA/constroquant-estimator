@@ -31,6 +31,12 @@ export interface BrickWallValidationError {
   message: string;
 }
 
+/** Standard opening sizes used when the user enables the openings toggle */
+export const STANDARD_DOOR_HEIGHT = 7;   // ft
+export const STANDARD_DOOR_WIDTH  = 3;   // ft
+export const STANDARD_WINDOW_HEIGHT = 4; // ft
+export const STANDARD_WINDOW_WIDTH  = 4; // ft
+
 export const parseBrickWallForm = (
   formData: FormData
 ): { input: BrickWallInput; errors: BrickWallValidationError[] } => {
@@ -54,16 +60,16 @@ export const parseBrickWallForm = (
     return val;
   };
 
-  const roomLength = getPositive("roomLength", "Room Length");
-  const roomBreadth = getPositive("roomBreadth", "Room Breadth");
-  const wallHeight = getPositive("wallHeight", "Wall Height");
+  const roomLength    = getPositive("roomLength",    "Room Length");
+  const roomBreadth   = getPositive("roomBreadth",   "Room Breadth");
+  const wallHeight    = getPositive("wallHeight",    "Wall Height");
   const wallThickness = getPositive("wallThickness", "Wall Thickness");
-  const doorHeight = getPositive("doorHeight", "Door Height");
-  const doorWidth = getPositive("doorWidth", "Door Width");
-  const numDoors = getNonNegativeInt("numDoors", "Number of Doors");
-  const windowHeight = getPositive("windowHeight", "Window Height");
-  const windowWidth = getPositive("windowWidth", "Window Width");
-  const numWindows = getNonNegativeInt("numWindows", "Number of Windows");
+
+  // Openings are optional — only parsed when the toggle is checked
+  const includeOpenings = formData.get("includeOpenings") === "on";
+
+  const numDoors   = includeOpenings ? getNonNegativeInt("numDoors",   "Number of Doors")   : 0;
+  const numWindows = includeOpenings ? getNonNegativeInt("numWindows", "Number of Windows") : 0;
 
   return {
     input: {
@@ -71,11 +77,12 @@ export const parseBrickWallForm = (
       roomBreadth,
       wallHeight,
       wallThickness,
-      doorHeight,
-      doorWidth,
+      // Standard sizes injected here — user never enters these
+      doorHeight:   STANDARD_DOOR_HEIGHT,
+      doorWidth:    STANDARD_DOOR_WIDTH,
       numDoors,
-      windowHeight,
-      windowWidth,
+      windowHeight: STANDARD_WINDOW_HEIGHT,
+      windowWidth:  STANDARD_WINDOW_WIDTH,
       numWindows,
     },
     errors,

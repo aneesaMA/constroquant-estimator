@@ -52,6 +52,19 @@ export const useEstimator = ({
 
     submitButton.disabled = constructionTypeSelect.value !== "room-construction";
 
+    // Wire the openings toggle to show/hide the count fields
+    const toggleCheckbox = form.querySelector<HTMLInputElement>("#includeOpenings");
+    const openingsFields = form.querySelector<HTMLDivElement>("#openings-fields");
+    if (toggleCheckbox && openingsFields) {
+      toggleCheckbox.addEventListener("change", () => {
+        if (toggleCheckbox.checked) {
+          openingsFields.classList.remove("bw-openings-hidden");
+        } else {
+          openingsFields.classList.add("bw-openings-hidden");
+        }
+      });
+    }
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const formData = new FormData(form);
@@ -88,14 +101,12 @@ export const useEstimator = ({
     });
   };
 
-  const SUBTITLES: Record<string, string> = {
-    "room-construction": "All dimensions in feet · Mix ratio 1:6 · Includes 5% brick wastage",
-    "road-construction": "Dimensions in metres · Thicknesses auto-assigned · Includes compaction &amp; 3% wastage",
-  };
-
   const updateSubtitle = (type: string): void => {
     const el = document.querySelector<HTMLSpanElement>("#estimator-subtitle");
-    if (el) el.textContent = SUBTITLES[type] ?? "Select a construction type to begin.";
+    if (!el) return;
+    if (type === "room-construction") el.textContent = "Room Construction Estimator";
+    else if (type === "road-construction") el.textContent = "Road Construction Estimator";
+    else el.textContent = "Select a construction type to begin.";
   };
 
   const renderBySelection = (): void => {

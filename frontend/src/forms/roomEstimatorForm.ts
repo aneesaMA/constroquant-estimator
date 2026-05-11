@@ -4,6 +4,10 @@ import { WALL_THICKNESS_OPTIONS } from "../constants/estimator.constants";
 /**
  * Room Estimator UI (Brick Wall Material Estimator).
  * Separated from the Road Estimator to keep concerns and future changes isolated.
+ *
+ * Standard opening sizes (used internally, not entered by user):
+ *   Door:   7 ft × 3 ft
+ *   Window: 4 ft × 4 ft
  */
 
 const renderRoomDimensionsSection = (): string => {
@@ -26,29 +30,30 @@ const renderRoomDimensionsSection = (): string => {
   `;
 };
 
-const renderDoorsSection = (): string => {
+const renderOpeningsSection = (): string => {
   return `
-    <fieldset class="bw-fieldset">
-      <legend class="bw-legend">Doors</legend>
-      <div class="input-grid input-grid-3">
-        ${InputField({ id: "doorHeight", name: "doorHeight", label: "Door Height (ft)", placeholder: "e.g. 7" })}
-        ${InputField({ id: "doorWidth", name: "doorWidth", label: "Door Width (ft)", placeholder: "e.g. 3" })}
-        ${InputField({ id: "numDoors", name: "numDoors", label: "Number of Doors", placeholder: "e.g. 1", step: "1", min: "0" })}
-      </div>
-    </fieldset>
-  `;
-};
-
-const renderWindowsSection = (): string => {
-  return `
-    <fieldset class="bw-fieldset">
-      <legend class="bw-legend">Windows</legend>
-      <div class="input-grid input-grid-3">
-        ${InputField({ id: "windowHeight", name: "windowHeight", label: "Window Height (ft)", placeholder: "e.g. 4" })}
-        ${InputField({ id: "windowWidth", name: "windowWidth", label: "Window Width (ft)", placeholder: "e.g. 4" })}
-        ${InputField({ id: "numWindows", name: "numWindows", label: "Number of Windows", placeholder: "e.g. 2", step: "1", min: "0" })}
-      </div>
-    </fieldset>
+    <div class="bw-toggle-row">
+      <label class="bw-toggle-label" for="includeOpenings">
+        <input
+          type="checkbox"
+          id="includeOpenings"
+          name="includeOpenings"
+          class="bw-toggle-checkbox"
+        />
+        <span class="bw-toggle-track" aria-hidden="true"></span>
+        Include Doors &amp; Windows
+      </label>
+      <span class="bw-toggle-hint">Standard sizes: Door 7×3 ft · Window 4×4 ft</span>
+    </div>
+    <div id="openings-fields" class="bw-openings-fields bw-openings-hidden">
+      <fieldset class="bw-fieldset">
+        <legend class="bw-legend">Openings</legend>
+        <div class="input-grid input-grid-2">
+          ${InputField({ id: "numDoors", name: "numDoors", label: "Number of Doors", placeholder: "e.g. 1", step: "1", min: "0" })}
+          ${InputField({ id: "numWindows", name: "numWindows", label: "Number of Windows", placeholder: "e.g. 2", step: "1", min: "0" })}
+        </div>
+      </fieldset>
+    </div>
   `;
 };
 
@@ -56,12 +61,12 @@ export const roomEstimatorForm = (): string => {
   return `
     <form id="estimate-form" novalidate>
       ${renderRoomDimensionsSection()}
-      ${renderDoorsSection()}
-      ${renderWindowsSection()}
+      ${renderOpeningsSection()}
       <button type="submit" class="bw-submit-btn">
         <span aria-hidden="true">🧮</span> Calculate Materials
       </button>
     </form>
   `;
 };
+
 

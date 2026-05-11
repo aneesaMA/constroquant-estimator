@@ -196,6 +196,35 @@ export const RoadResultCard = (result: RoadResult): string => {
     rawMaterialsHtml = renderGravelRawMaterials(materials as GravelRawMaterials);
   }
 
+  // Build assumption chips based on pavement type
+  let assumptionChips = `
+    <span class="bw-chip">Wastage 3%</span>
+    <span class="bw-chip">GSB factor 1.29×</span>
+  `;
+  if ("WMM" in thicknesses) {
+    assumptionChips = `
+      <span class="bw-chip">DBM density 2.4 t/m³</span>
+      <span class="bw-chip">BC density 2.4 t/m³</span>
+      <span class="bw-chip">Bitumen content 5%</span>
+      <span class="bw-chip">Aggregate 95%</span>
+      <span class="bw-chip">GSB factor 1.29×</span>
+      <span class="bw-chip">WMM factor 1.24×</span>
+      <span class="bw-chip">Wastage 3%</span>
+    `;
+  } else if ("DLC" in thicknesses) {
+    assumptionChips = `
+      <span class="bw-chip">Mix M20 (1:1.5:3)</span>
+      <span class="bw-chip">30 bags/m³ (50 kg)</span>
+      <span class="bw-chip">GSB factor 1.29×</span>
+      <span class="bw-chip">Wastage 3%</span>
+    `;
+  } else {
+    assumptionChips = `
+      <span class="bw-chip">GSB factor 1.29×</span>
+      <span class="bw-chip">Wastage 3%</span>
+    `;
+  }
+
   return `
     <div class="bw-result-card" role="region" aria-label="Road Estimation Results">
       <h3 class="bw-result-title">Road Material Estimate</h3>
@@ -214,7 +243,12 @@ export const RoadResultCard = (result: RoadResult): string => {
         </div>
       </div>
 
-      <p class="bw-result-note">Volumes in m³ · Masses in tonnes · Cement bags (50 kg each) · Includes compaction &amp; wastage factors</p>
+      <div class="bw-assumptions">
+        <span class="bw-assumptions-title">Calculation Assumptions</span>
+        <div class="bw-assumptions-chips">
+          ${assumptionChips}
+        </div>
+      </div>
     </div>
   `;
 };

@@ -18,6 +18,8 @@ export const ResultCard = (result: EstimateResponse): string => {
 
 // Brick Wall result card
 export const BrickWallResultCard = (result: BrickWallResult): string => {
+  const hasOpenings = result.openingVolume > 0;
+
   return `
     <div class="bw-result-card" role="region" aria-label="Estimation Results">
       <h3 class="bw-result-title">Material Estimate</h3>
@@ -58,7 +60,23 @@ export const BrickWallResultCard = (result: BrickWallResult): string => {
           </div>
         </div>
       </div>
-      <p class="bw-result-note">Mix ratio 1:6 (cement:sand) · All volumes in CFT</p>
+      <div class="bw-assumptions">
+        <span class="bw-assumptions-title">Calculation Assumptions</span>
+        <div class="bw-assumptions-chips">
+          <span class="bw-chip">Brick 10″×4.5″×3″</span>
+          <span class="bw-chip">Mortar joint 0.5″</span>
+          <span class="bw-chip">9.40 bricks/ft³</span>
+          <span class="bw-chip">5% wastage</span>
+          <span class="bw-chip">Mortar 30% of volume</span>
+          <span class="bw-chip">Dry factor 1.33×</span>
+          <span class="bw-chip">Mix 1:6 (cement:sand)</span>
+          <span class="bw-chip">50 kg bag = 1.25 ft³</span>
+          ${hasOpenings ? `
+          <span class="bw-chip">Std. door 7×3 ft</span>
+          <span class="bw-chip">Std. window 4×4 ft</span>
+          ` : ""}
+        </div>
+      </div>
     </div>
   `;
 };

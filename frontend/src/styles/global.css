@@ -348,6 +348,119 @@ input[type="number"]:focus {
   text-align: center;
 }
 
+/* ── Openings toggle ── */
+.bw-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.bw-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  user-select: none;
+}
+
+/* Hide the native checkbox visually */
+.bw-toggle-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Custom pill track */
+.bw-toggle-track {
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+  background: #d7dce4;
+  border-radius: 20px;
+  position: relative;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.bw-toggle-track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+}
+
+.bw-toggle-checkbox:checked + .bw-toggle-track {
+  background: #bf2b2b;
+}
+
+.bw-toggle-checkbox:checked + .bw-toggle-track::after {
+  transform: translateX(16px);
+}
+
+.bw-toggle-hint {
+  font-size: 0.72rem;
+  color: #9ca3af;
+}
+
+.bw-openings-fields {
+  overflow: hidden;
+  transition: max-height 0.22s ease, opacity 0.22s ease;
+  max-height: 300px;
+  opacity: 1;
+}
+
+.bw-openings-hidden {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Calculation Assumptions ── */
+.bw-assumptions {
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid #ebedf2;
+}
+
+.bw-assumptions-title {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+  margin-bottom: 0.45rem;
+}
+
+.bw-assumptions-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.bw-chip {
+  display: inline-block;
+  background: #f4f6fb;
+  border: 1px solid #e5e8f0;
+  border-radius: 20px;
+  padding: 0.18rem 0.6rem;
+  font-size: 0.68rem;
+  color: #6d7280;
+  white-space: nowrap;
+}
+
 /* ── Error message ── */
 .error-message {
   color: #b42318;
