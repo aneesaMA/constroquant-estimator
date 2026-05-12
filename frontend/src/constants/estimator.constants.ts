@@ -1,6 +1,6 @@
 import type { ConstructionType } from "../types/estimator.types";
 
-export const API_BASE_URL = "https://constroquant-estimator.onrender.com";
+export const API_BASE_URL = "https://constroquant-estimator.onrender.com/api";
 
 export const CONSTRUCTION_TYPE_OPTIONS: Array<{
   value: ConstructionType;
